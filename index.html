@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Download für Gesundheitstagebuch</title>
+  <meta name="description" content="Gesundheitstagebuch herunterladen: Blutdruck, Puls, Gewicht und Symptome eintragen – verschlüsselt, offline und nur auf deinem Gerät.">
+  <meta name="theme-color" content="#0b3b3a">
+  <meta name="referrer" content="no-referrer">
+
+  <!--
+    Diese Seite gehört in dasselbe Repository wie die Datei "meine-werte.zip"
+    (beide im Hauptordner). Der Download-Button unten verweist relativ darauf.
+    Sie lädt nichts aus dem Internet nach (keine Schriften, keine Skripte von Dritten).
+  -->
+
+  <style>
+    /* ---------- Farben (hell + dunkel automatisch) ---------- */
+    :root {
+      --bg: #f2f7f7;
+      --surface: #ffffff;
+      --ink: #0f2429;
+      --muted: #52666c;
+      --line: #d7e3e4;
+      --accent: #0f766e;
+      --soft: #e2f1f0;
+      --code: #0f2429;
+      --code-ink: #d9f3ef;
+      --shadow: 0 12px 32px rgba(15, 60, 60, .14);
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0a1417;
+        --surface: #122025;
+        --ink: #e6f1f2;
+        --muted: #9bb2b7;
+        --line: #223940;
+        --accent: #4fd1c5;
+        --soft: #17333a;
+        --code: #08110f;
+        --shadow: 0 12px 32px rgba(0, 0, 0, .45);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    /* ---------- Kopfbereich ---------- */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      text-align: center;
+      padding: calc(env(safe-area-inset-top, 0px) + clamp(2.5rem, 8vw, 5rem)) 1.25rem clamp(6rem, 14vw, 9rem);
+      background:
+        radial-gradient(60rem 30rem at 85% -10%, rgba(94, 234, 212, .35), transparent 60%),
+        radial-gradient(40rem 24rem at 5% 110%, rgba(20, 184, 166, .30), transparent 60%),
+        linear-gradient(135deg, #0a2f30 0%, #0f766e 60%, #14a39a 100%);
+    }
+    .hero > * { position: relative; z-index: 1; }
+
+    /* Herzschlag-Linie im Hintergrund */
+    .beat {
+      position: absolute !important;
+      left: 0; right: 0; bottom: 1.5rem;
+      width: 100%; height: clamp(70px, 14vw, 130px);
+      opacity: .28;
+      z-index: 0 !important;
+    }
+    .beat path {
+      fill: none; stroke: #fff; stroke-width: 3;
+      stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 1400; stroke-dashoffset: 1400;
+      animation: draw 4.5s ease-in-out infinite;
+    }
+    @keyframes draw {
+      0%   { stroke-dashoffset: 1400; }
+      60%  { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -1400; }
+    }
+
+    .badge {
+      display: inline-block;
+      padding: .35rem .9rem;
+      border: 1px solid rgba(255, 255, 255, .35);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .12);
+      font-size: .85rem;
+      letter-spacing: .02em;
+      backdrop-filter: blur(6px);
+    }
+    h1 {
+      margin: 1.1rem auto .8rem;
+      max-width: 14em;
+      font-size: clamp(2rem, 7vw, 3.6rem);
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      text-wrap: balance;
+    }
+    .lead {
+      margin: 0 auto 2rem;
+      max-width: 34rem;
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      color: rgba(255, 255, 255, .9);
+      text-wrap: balance;
+    }
+
+    /* ---------- Download-Button ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .75rem;
+      min-height: 3.5rem;
+      padding: .9rem 1.8rem;
+      border-radius: 999px;
+      background: #fff;
+      color: #0b4a46;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .28);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0, 0, 0, .34); }
+    .btn:active { transform: translateY(0); }
+    .btn:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+    .btn svg { width: 1.4rem; height: 1.4rem; flex: none; }
+    .file { margin: .9rem 0 0; font-size: .9rem; color: rgba(255, 255, 255, .8); }
+
+    /* ---------- Inhalt ---------- */
+    main {
+      width: min(100% - 2rem, 54rem);
+      margin: calc(-1 * clamp(3rem, 8vw, 4.5rem)) auto 0;
+      position: relative;
+      z-index: 2;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow);
+      padding: clamp(1.1rem, 4vw, 2rem);
+    }
+    h2 { margin: 0 0 .3rem; font-size: clamp(1.3rem, 4vw, 1.7rem); letter-spacing: -.01em; }
+    .sub { margin: 0 0 1.25rem; color: var(--muted); }
+
+    /* Reiter */
+    .tabs {
+      display: flex;
+      gap: .35rem;
+      padding: .3rem;
+      margin-bottom: 1.25rem;
+      background: var(--soft);
+      border-radius: .9rem;
+    }
+    .tabs button {
+      flex: 1;
+      min-height: 2.75rem;
+      padding: .5rem .6rem;
+      border: 0;
+      border-radius: .65rem;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tabs button[aria-selected="true"] {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+    }
+    .tabs button:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+    [hidden] { display: none !important; }
+
+    /* Schritte */
+    ol.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 1rem; }
+    ol.steps li {
+      counter-increment: s;
+      position: relative;
+      padding-left: 3rem;
+      min-height: 2.2rem;
+    }
+    ol.steps li::before {
+      content: counter(s);
+      position: absolute; left: 0; top: 0;
+      width: 2.2rem; height: 2.2rem;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+    @media (prefers-color-scheme: dark) { ol.steps li::before { color: #06262a; } }
+    ol.steps strong { display: block; }
+    ol.steps p { margin: .15rem 0 0; color: var(--muted); }
+
+    pre {
+      margin: .5rem 0 0;
+      padding: .8rem 1rem;
+      overflow-x: auto;
+      border-radius: .7rem;
+      background: var(--code);
+      color: var(--code-ink);
+      font: .9rem/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    p code, li code {
+      padding: .08rem .35rem;
+      border-radius: .35rem;
+      background: var(--soft);
+      font-size: .92em;
+    }
+    .note {
+      margin: 1.25rem 0 0;
+      padding: .8rem 1rem;
+      border-left: 4px solid var(--accent);
+      border-radius: .5rem;
+      background: var(--soft);
+      font-size: .95rem;
+    }
+
+    /* Vorteile */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0 0;
+    }
+    .feature {
+      padding: 1.1rem 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+    }
+    .feature .ico {
+      display: grid; place-items: center;
+      width: 2.6rem; height: 2.6rem;
+      margin-bottom: .6rem;
+      border-radius: .8rem;
+      background: var(--soft);
+      color: var(--accent);
+    }
+    .feature .ico svg { width: 1.4rem; height: 1.4rem; }
+    .feature h3 { margin: 0 0 .2rem; font-size: 1.05rem; }
+    .feature p { margin: 0; color: var(--muted); font-size: .95rem; }
+
+    footer {
+      width: min(100% - 2rem, 54rem);
+      margin: 2rem auto 0;
+      padding: 0 0 calc(env(safe-area-inset-bottom, 0px) + 2.5rem);
+      color: var(--muted);
+      font-size: .85rem;
+      text-align: center;
+    }
+
+    /* Download prüfen */
+    details.verify { margin-top: 1.25rem; padding: .2rem 1rem; border: 1px solid var(--line); border-radius: .8rem; }
+    details.verify summary { display: flex; align-items: center; min-height: 2.75rem; cursor: pointer; font-weight: 600; }
+    details.verify p { margin: .4rem 0; color: var(--muted); font-size: .95rem; }
+    details.verify pre code { word-break: break-all; white-space: pre-wrap; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .beat path { animation: none; stroke-dashoffset: 0; }
+      .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <!-- dekorative Herzschlag-Linie -->
+    <svg class="beat" viewBox="0 0 800 120" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 70 H230 L260 70 L285 20 L325 105 L355 45 L375 70 H800"/>
+    </svg>
+
+    <span class="badge">Kostenlos · Offline · Daten bleiben bei dir</span>
+    <h1>Download für Gesundheitstagebuch</h1>
+    <p class="lead">Blutdruck, Puls, Gewicht und Symptome eintragen – verschlüsselt und nur auf deinem eigenen Gerät gespeichert.</p>
+
+    <a class="btn" href="meine-werte.zip" download>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg>
+      ZIP herunterladen
+    </a>
+    <p class="file">Datei: <code>meine-werte.zip</code></p>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="install-title">
+      <h2 id="install-title">Installieren in 3 Schritten</h2>
+      <p class="sub">Wähle dein Gerät:</p>
+
+      <div class="tabs" role="tablist" aria-label="Gerät wählen">
+        <button type="button" role="tab" id="tab-windows" aria-controls="panel-windows" aria-selected="true">Windows</button>
+        <button type="button" role="tab" id="tab-linux" aria-controls="panel-linux" aria-selected="false">Linux</button>
+        <button type="button" role="tab" id="tab-mobile" aria-controls="panel-mobile" aria-selected="false">iPhone &amp; Android</button>
+      </div>
+
+      <!-- Windows -->
+      <div role="tabpanel" id="panel-windows" aria-labelledby="tab-windows">
+        <ol class="steps">
+          <li><strong>ZIP herunterladen und entpacken</strong>
+            <p>Rechtsklick auf die Datei → „Alle extrahieren“.</p></li>
+          <li><strong>Python installieren (einmalig)</strong>
+            <p>Von python.org herunterladen. Bei der Installation „Add Python to PATH“ ankreuzen.</p></li>
+          <li><strong>App starten</strong>
+            <p>Im entpackten Ordner <code>start.bat</code> doppelklicken. Der Browser öffnet <code>http://localhost:7070</code>.</p></li>
+        </ol>
+      </div>
+
+      <!-- Linux -->
+      <div role="tabpanel" id="panel-linux" aria-labelledby="tab-linux" hidden>
+        <ol class="steps">
+          <li><strong>ZIP herunterladen und entpacken</strong>
+            <pre><code>unzip meine-werte.zip
+cd meine-werte</code></pre></li>
+          <li><strong>Startskript ausführbar machen (einmalig)</strong>
+            <pre><code>chmod +x start.sh</code></pre></li>
+          <li><strong>App starten</strong>
+            <pre><code>./start.sh</code></pre>
+            <p>Der Browser öffnet <code>http://localhost:7070</code>. Beenden mit Strg+C.</p></li>
+        </ol>
+      </div>
+
+      <!-- iPhone & Android -->
+      <div role="tabpanel" id="panel-mobile" aria-labelledby="tab-mobile" hidden>
+        <ol class="steps">
+          <li><strong>App im Internet bereitstellen (einmalig)</strong>
+            <p>Den entpackten Ordner auf einen Webspace mit <code>https://</code> legen, zum Beispiel über GitHub Pages. Eine Anleitung steht in der <code>README.md</code> im ZIP.</p></li>
+          <li><strong>Adresse auf dem Handy öffnen</strong>
+            <p>iPhone: in <em>Safari</em>. Android: in <em>Chrome</em>.</p></li>
+          <li><strong>Zum Startbildschirm hinzufügen</strong>
+            <p>iPhone: Teilen → „Zum Home-Bildschirm“. Android: Menü (⋮) → „App installieren“. Danach läuft die App auch ohne Internet.</p></li>
+        </ol>
+        <p class="note">Auf dem iPhone die App immer über das Symbol starten. Nur so bleiben die Daten dauerhaft erhalten.</p>
+      </div>
+
+      <p class="note"><strong>Wichtig:</strong> Beim ersten Start legst du ein Profil mit Passwort an (mindestens 12 Zeichen). Das Passwort kann nicht wiederhergestellt werden – merke es dir gut.</p>
+
+      <details class="verify">
+        <summary>Download prüfen (optional)</summary>
+        <p>So erkennst du Übertragungsfehler oder eine beschädigte Datei. Die Prüfsumme (SHA-256) muss genau übereinstimmen:</p>
+        <pre><code>246ee6413e7e4ef4e9c0b732866f75323e4a2b6580b6131f4ab3bae3e492f032</code></pre>
+        <p><strong>Linux:</strong></p>
+        <pre><code>sha256sum meine-werte.zip</code></pre>
+        <p><strong>Windows (PowerShell):</strong></p>
+        <pre><code>Get-FileHash meine-werte.zip -Algorithm SHA256</code></pre>
+        <p>Stimmt der Wert nicht überein, die Datei nicht verwenden. Hinweis: Wer das Repository kontrolliert, kann Datei und Prüfsumme gemeinsam ändern – die Prüfung ersetzt kein Vertrauen in den Anbieter. Nach jeder neuen ZIP muss die Summe hier neu eingetragen werden.</p>
+      </details>
+    </section>
+
+    <section class="features" aria-label="Vorteile">
+      <article class="feature">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <h3>Verschlüsselt</h3>
+        <p>Deine Werte werden mit deinem Passwort geschützt und verlassen das Gerät nie.</p>
+      </article>
+      <article class="feature">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><path d="M12 19.5h.01"/><path d="m3 3 18 18"/></svg></div>
+        <h3>Funktioniert offline</h3>
+        <p>Nach der Installation brauchst du kein Internet mehr.</p>
+      </article>
+      <article class="feature">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="14" height="10" rx="2"/><path d="M8 18h4"/><path d="M10 14v4"/><rect x="16" y="9" width="5" height="11" rx="1.5"/></svg></div>
+        <h3>Für alle Geräte</h3>
+        <p>Windows, Linux, iPhone und Android – mit hellem und dunklem Modus.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>Das Gesundheitstagebuch ist ein privates Hilfsmittel und ersetzt keine ärztliche Beratung.</p>
+  </footer>
+
+  <script>
+    // Reiter umschalten + passendes Gerät automatisch vorwählen
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+
+      function select(tab) {
+        tabs.forEach(function (t) {
+          var on = t === tab;
+          t.setAttribute('aria-selected', on);
+          document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+        });
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { select(t); });
+        // Pfeiltasten wechseln den Reiter
+        t.addEventListener('keydown', function (e) {
+          var next = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null;
+          if (next === null) return;
+          var target = tabs[(next + tabs.length) % tabs.length];
+          target.focus();
+          select(target);
+        });
+      });
+
+      var ua = navigator.userAgent || '';
+      var isMobile = /iPhone|iPad|iPod|Android/i.test(ua)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (isMobile) select(document.getElementById('tab-mobile'));
+      else if (/Linux|X11/i.test(ua) && !/Windows/i.test(ua)) select(document.getElementById('tab-linux'));
+    })();
+  </script>
+</body>
+</html>
