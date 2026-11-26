@@ -6,6 +6,7 @@
   <title>Download für Gesundheitstagebuch</title>
   <meta name="description" content="Gesundheitstagebuch herunterladen: Blutdruck, Puls, Gewicht und Symptome eintragen – verschlüsselt, offline und nur auf deinem Gerät.">
   <meta name="theme-color" content="#0b3b3a">
+  <meta name="referrer" content="no-referrer">
 
   <!--
     Diese Seite gehört in dasselbe Repository wie die Datei "meine-werte.zip"
@@ -263,6 +264,12 @@
       text-align: center;
     }
 
+    /* Download prüfen */
+    details.verify { margin-top: 1.25rem; padding: .2rem 1rem; border: 1px solid var(--line); border-radius: .8rem; }
+    details.verify summary { display: flex; align-items: center; min-height: 2.75rem; cursor: pointer; font-weight: 600; }
+    details.verify p { margin: .4rem 0; color: var(--muted); font-size: .95rem; }
+    details.verify pre code { word-break: break-all; white-space: pre-wrap; }
+
     @media (prefers-reduced-motion: reduce) {
       .beat path { animation: none; stroke-dashoffset: 0; }
       .btn { transition: none; }
@@ -338,7 +345,18 @@ cd meine-werte</code></pre></li>
         <p class="note">Auf dem iPhone die App immer über das Symbol starten. Nur so bleiben die Daten dauerhaft erhalten.</p>
       </div>
 
-      <p class="note"><strong>Wichtig:</strong> Beim ersten Start legst du ein Profil mit Passwort an. Das Passwort kann nicht wiederhergestellt werden – merke es dir gut.</p>
+      <p class="note"><strong>Wichtig:</strong> Beim ersten Start legst du ein Profil mit Passwort an (mindestens 12 Zeichen). Das Passwort kann nicht wiederhergestellt werden – merke es dir gut.</p>
+
+      <details class="verify">
+        <summary>Download prüfen (optional)</summary>
+        <p>So erkennst du Übertragungsfehler oder eine beschädigte Datei. Die Prüfsumme (SHA-256) muss genau übereinstimmen:</p>
+        <pre><code>246ee6413e7e4ef4e9c0b732866f75323e4a2b6580b6131f4ab3bae3e492f032</code></pre>
+        <p><strong>Linux:</strong></p>
+        <pre><code>sha256sum meine-werte.zip</code></pre>
+        <p><strong>Windows (PowerShell):</strong></p>
+        <pre><code>Get-FileHash meine-werte.zip -Algorithm SHA256</code></pre>
+        <p>Stimmt der Wert nicht überein, die Datei nicht verwenden. Hinweis: Wer das Repository kontrolliert, kann Datei und Prüfsumme gemeinsam ändern – die Prüfung ersetzt kein Vertrauen in den Anbieter. Nach jeder neuen ZIP muss die Summe hier neu eingetragen werden.</p>
+      </details>
     </section>
 
     <section class="features" aria-label="Vorteile">
