@@ -1,0 +1,46 @@
+/* =====================================================================
+ *  css/app.css – eigene Ergänzungen (werden NACH Tailwind geladen)
+ *  Diese Datei kannst du direkt bearbeiten, ohne Tailwind neu zu bauen.
+ * ===================================================================== */
+
+/* Das HTML-Attribut "hidden" soll immer gewinnen (auch gegen Tailwind-Klassen) */
+[hidden] { display: none !important; }
+
+/* Eingabefelder, Datumswahl usw. passen sich dem Modus an */
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
+
+html { -webkit-tap-highlight-color: transparent; }
+
+/* ---------- Sichere Bereiche (iPhone-Notch, Home-Balken) ---------- */
+/* Auf Desktop und Android sind diese Werte 0. */
+.safe-top    { padding-top: env(safe-area-inset-top, 0px); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* ---------- Farben der Diagramme (hell / dunkel) ---------- */
+:root {
+  --chart-grid: #cbd5e1;
+  --chart-text: #64748b;
+  --chart-a: #c2410c;   /* Linie A: oben / Puls / Gewicht */
+  --chart-b: #0f766e;   /* Linie B: unten */
+}
+.dark {
+  --chart-grid: #334155;
+  --chart-text: #94a3b8;
+  --chart-a: #fb923c;
+  --chart-b: #2dd4bf;
+}
+.chart-grid   { stroke: var(--chart-grid); stroke-width: 1; }
+.chart-text   { fill: var(--chart-text); font-size: 11px; }
+.chart-line-a { stroke: var(--chart-a); fill: none; stroke-width: 2.5; stroke-linejoin: round; }
+.chart-line-b { stroke: var(--chart-b); fill: none; stroke-width: 2.5; stroke-linejoin: round; }
+.chart-dot-a  { fill: var(--chart-a); }
+.chart-dot-b  { fill: var(--chart-b); }
+
+/* ---------- Kleine Anpassungen je Bereich ---------- */
+/* Das Attribut data-platform ("ios" | "android" | "desktop") setzt app.js am <html>-Element. */
+html[data-platform="ios"] input,
+html[data-platform="ios"] select,
+html[data-platform="ios"] textarea {
+  font-size: 16px; /* verhindert das automatische Hineinzoomen von iOS */
+}

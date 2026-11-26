@@ -1,0 +1,106 @@
+/* =====================================================================
+ *  src/input.css – Quelle für Tailwind
+ *
+ *  Diese Datei wird NICHT direkt geladen. Daraus erzeugt Tailwind
+ *  die Datei css/tailwind.css (siehe README: "npm run build:css").
+ *
+ *  Unten stehen eigene, wiederverwendbare Bausteine (.card, .btn ...),
+ *  die aus Tailwind-Klassen zusammengesetzt sind. Willst du das
+ *  Aussehen ändern, ist das der beste Ort dafür.
+ * ===================================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Karte (weiße Fläche) */
+  .card {
+    @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm
+           dark:border-slate-700 dark:bg-slate-800;
+  }
+
+  /* Hinweiskasten (gelb) */
+  .notice {
+    @apply rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900
+           dark:border-amber-500/50 dark:bg-amber-950/40 dark:text-amber-100;
+  }
+
+  /* Formularelemente */
+  .label {
+    @apply mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300;
+  }
+  .hint {
+    @apply mt-1 text-sm text-slate-500 dark:text-slate-400;
+  }
+  .input {
+    @apply w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-base
+           text-slate-900 placeholder-slate-400
+           focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/40
+           dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500;
+  }
+
+  /* Schaltflächen */
+  .btn-base {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2.5 font-semibold transition
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2
+           disabled:cursor-wait disabled:opacity-50 dark:focus-visible:ring-offset-slate-900;
+  }
+  .btn-primary {
+    @apply btn-base bg-teal-700 text-white hover:bg-teal-800
+           dark:bg-teal-500 dark:text-slate-900 dark:hover:bg-teal-400;
+  }
+  .btn-ghost {
+    @apply btn-base border border-slate-300 text-slate-800 hover:bg-slate-100
+           dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700;
+  }
+  .btn-danger {
+    @apply btn-base border border-red-300 text-red-700 hover:bg-red-50
+           dark:border-red-500/50 dark:text-red-300 dark:hover:bg-red-500/10;
+  }
+  .icon-btn {
+    @apply inline-flex h-11 w-11 items-center justify-center rounded-xl text-slate-700 hover:bg-slate-100
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500
+           dark:text-slate-200 dark:hover:bg-slate-700;
+  }
+  .link {
+    @apply text-teal-700 underline underline-offset-2 dark:text-teal-300;
+  }
+
+  /* Reiter (Umschalter) */
+  .tab {
+    @apply flex-1 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300
+           aria-selected:bg-white aria-selected:text-slate-900 aria-selected:shadow
+           dark:aria-selected:bg-slate-700 dark:aria-selected:text-white;
+  }
+
+  /* Auswahl-Chips (Symptome, Diagrammwahl) */
+  .chip {
+    @apply rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-800
+           dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100
+           aria-pressed:border-teal-700 aria-pressed:bg-teal-700 aria-pressed:text-white
+           dark:aria-pressed:border-teal-400 dark:aria-pressed:bg-teal-400 dark:aria-pressed:text-slate-900;
+  }
+  .chip-static {
+    @apply rounded-full bg-teal-100 px-3 py-1 text-sm text-teal-900 dark:bg-teal-900/50 dark:text-teal-100;
+  }
+
+  /* Befinden (Smileys) */
+  .mood-btn {
+    @apply rounded-xl border-2 border-slate-200 bg-slate-50 py-2 text-3xl leading-none
+           dark:border-slate-600 dark:bg-slate-900
+           aria-pressed:border-teal-700 aria-pressed:bg-teal-100
+           dark:aria-pressed:border-teal-400 dark:aria-pressed:bg-teal-900/50;
+  }
+
+  /* Navigation: Seitenleiste (Desktop) und untere Leiste (Handy) */
+  .nav-side {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-left font-medium text-slate-700 hover:bg-slate-100
+           dark:text-slate-200 dark:hover:bg-slate-700
+           aria-[current=page]:bg-teal-100 aria-[current=page]:text-teal-900
+           dark:aria-[current=page]:bg-teal-900/50 dark:aria-[current=page]:text-teal-100;
+  }
+  .nav-bottom {
+    @apply flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium text-slate-600 dark:text-slate-300
+           aria-[current=page]:text-teal-700 dark:aria-[current=page]:text-teal-300;
+  }
+}

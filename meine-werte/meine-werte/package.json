@@ -1,0 +1,14 @@
+{
+  "name": "meine-werte",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private Gesundheits-App (lokal, verschlüsselt)",
+  "scripts": {
+    "build:css": "tailwindcss -i src/input.css -o css/tailwind.css --minify",
+    "watch:css": "tailwindcss -i src/input.css -o css/tailwind.css --watch",
+    "serve": "python3 server.py"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
